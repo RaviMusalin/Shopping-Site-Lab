@@ -6,7 +6,7 @@ put melons in a shopping cart.
 Authors: Joel Burton, Christian Fernandez, Meggie Mahnken, Katie Byers.
 """
 
-from flask import Flask, render_template, redirect, flash
+from flask import Flask, render_template, redirect, flash, session
 import jinja2
 
 import melons
@@ -51,7 +51,6 @@ def show_melon(melon_id):
     """
 
     melon = melons.get_by_id(melon_id)
-    print(melon)
     return render_template("melon_details.jinja",
                            display_melon=melon)
 
@@ -66,6 +65,13 @@ def add_to_cart(melon_id):
 
     # TODO: Finish shopping cart functionality
 
+    cart = session.get("cart", {})
+    cart[melon_id] = cart.get(melon_id, 0) + 1
+
+    melon = melons.get_by_id(melon_id)
+    melon_name = melon.common_name
+    flash(f"You've added {melon_name} to your cart")
+    return redirect("/cart")
     # The logic here should be something like:
     #
     # - check if a "cart" exists in the session, and create one (an empty
@@ -74,8 +80,6 @@ def add_to_cart(melon_id):
     # - increment the count for that melon id by 1
     # - flash a success message
     # - redirect the user to the cart page
-
-    return "Oops! This needs to be implemented!"
 
 
 @app.route("/cart")
