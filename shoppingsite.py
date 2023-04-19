@@ -31,7 +31,7 @@ app.config['PRESERVE_CONTEXT_ON_EXCEPTION'] = True
 def index():
     """Return homepage."""
 
-    return render_template("homepage.html")
+    return render_template("homepage.jinja")
 
 
 @app.route("/melons")
@@ -39,7 +39,7 @@ def list_melons():
     """Return page showing all the melons ubermelon has to offer"""
 
     melon_list = melons.get_all()
-    return render_template("all_melons.html",
+    return render_template("all_melons.jinja",
                            melon_list=melon_list)
 
 
@@ -50,9 +50,9 @@ def show_melon(melon_id):
     Show all info about a melon. Also, provide a button to buy that melon.
     """
 
-    melon = melons.get_by_id("meli")
+    melon = melons.get_by_id(melon_id)
     print(melon)
-    return render_template("melon_details.html",
+    return render_template("melon_details.jinja",
                            display_melon=melon)
 
 
@@ -100,14 +100,14 @@ def show_shopping_cart():
     # Make sure your function can also handle the case wherein no cart has
     # been added to the session
 
-    return render_template("cart.html")
+    return render_template("cart.jinja")
 
 
 @app.route("/login", methods=["GET"])
 def show_login():
     """Show login form."""
 
-    return render_template("login.html")
+    return render_template("login.jinja")
 
 
 @app.route("/login", methods=["POST"])
