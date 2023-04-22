@@ -77,35 +77,30 @@ def add_to_cart(melon_id):
 def show_shopping_cart():
     """Display content of shopping cart."""
 
-    # TODO: Display the contents of the shopping cart.
-    session["cart"] = session.get("cart", {})
-    melons_list = []
-    total_cost = 0
-    
-    for melon_id in session["cart"]:
+    # Initialize cart variable to session cart
+    cart = session.get("cart", {})
+
+    # Initialize checkout cart list and order total
+    melon_cart = []
+    order_total = 0
+
+    # Loop through session cart and retrieve melon id and qty
+    for melon_id, melon_qty in cart.items():
+
+        # For each melon id, get melon object from melons.py
+        # and append it to melon cart list
         melon = melons.get_by_id(melon_id)
-        melons_list.append(melon)
+        melon_cart.append(melon)
 
-        melon.quantity = session["cart"][melon_id]
+        # Update melon object qty and total price
+        melon.quantity = melon_qty
         melon.total_price = melon.quantity * melon.price
-        
-        total_cost += melon.total_price
-    for melon in melons_list:
-        print(f"Name: {melon.common_name} Price: {melon.price} Qty: {melon.quantity} Total: {melon.total_price}")
-    print(total_cost)
 
-    # - loop over the cart dictionary, and for each melon id:
-    #    - get the corresponding Melon object
-    #    - compute the total cost for that type of melon
-    #    - add this to the order total
-    #    - add quantity and total cost as attributes on the Melon object
-    #    - add the Melon object to the list created above
-    # - pass the total order cost and the list of Melon objects to the template
-    #
-    # Make sure your function can also handle the case wherein no cart has
-    # been added to the session
+        # Update order total based on melon total price
+        order_total += melon.total_price
 
-    return render_template("cart.jinja")
+    # Render cart template with melon cart and order total formatted with two decimal points
+    return render_template("cart.jinja", melon_cart=melon_cart, order_total=f"{order_total:.2f}")
 
 
 @app.route("/login", methods=["GET"])
