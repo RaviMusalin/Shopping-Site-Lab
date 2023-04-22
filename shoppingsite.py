@@ -142,6 +142,15 @@ def process_login():
     return redirect("/melons")
 
 
+@app.route("/logout", methods=["GET"])
+def process_logout():
+    """Redirect user back to melon page upon logout."""
+
+    del session["email"]
+    flash("Successfully logged you out!")
+    return redirect("/melons")
+
+
 @app.route("/checkout")
 def checkout():
     """Checkout customer, process payment, and ship melons."""
